@@ -1,10 +1,6 @@
 import {
   Resource,
   EnumResourceType,
-  ResourceSearchCriteria,
-  EnumResourceSearchCriteriaType,
-  Pageable,
-  Sort,
   IList,
   List,
   IListResult,
@@ -23,7 +19,7 @@ export class ResourcesService {
   /**
    *
    */
-  static resources(
+  static get3(
     params: {
       /**  */
       id: number;
@@ -45,7 +41,31 @@ export class ResourcesService {
   /**
    *
    */
-  static resources1(
+  static update4(
+    params: {
+      /**  */
+      id: number;
+      /** requestBody */
+      body?: Resource;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/resources/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   *
+   */
+  static delete3(
     params: {
       /**  */
       id: number;
@@ -67,7 +87,7 @@ export class ResourcesService {
   /**
    *
    */
-  static resources2(options: IRequestOptions = {}): Promise<any> {
+  static list3(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/resources';
 
@@ -82,28 +102,7 @@ export class ResourcesService {
   /**
    *
    */
-  static resources3(
-    params: {
-      /** requestBody */
-      body?: Resource;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/resources';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   *
-   */
-  static resources4(
+  static create4(
     params: {
       /** requestBody */
       body?: Resource;
@@ -124,12 +123,26 @@ export class ResourcesService {
   /**
    *
    */
-  static search(
+  static search3(
     params: {
       /**  */
-      criteria: ResourceSearchCriteria;
+      name?: string;
       /**  */
-      pageable: Pageable;
+      parentId?: string;
+      /**  */
+      type?: string;
+      /**  */
+      code?: string;
+      /**  */
+      path?: string;
+      /**  */
+      blocked?: boolean;
+      /** Zero-based page index (0..N) */
+      page?: number;
+      /** The size of the page to be returned */
+      size?: number;
+      /** Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+      sort?: any | null[];
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
@@ -137,7 +150,17 @@ export class ResourcesService {
       let url = basePath + '/resources/search';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { criteria: params['criteria'], pageable: params['pageable'] };
+      configs.params = {
+        name: params['name'],
+        parentId: params['parentId'],
+        type: params['type'],
+        code: params['code'],
+        path: params['path'],
+        blocked: params['blocked'],
+        page: params['page'],
+        size: params['size'],
+        sort: params['sort']
+      };
       let data = null;
 
       configs.data = data;

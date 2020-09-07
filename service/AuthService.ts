@@ -1,5 +1,6 @@
 import {
   LoginRequest,
+  PasswordModifyRequest,
   IList,
   List,
   IListResult,
@@ -33,7 +34,7 @@ export class AuthService {
   /**
    *
    */
-  static token(
+  static authenticate(
     params: {
       /** requestBody */
       body?: LoginRequest;
@@ -42,6 +43,27 @@ export class AuthService {
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/auth/token';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   *
+   */
+  static updatePwd(
+    params: {
+      /** requestBody */
+      body?: PasswordModifyRequest;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/auth/updatePwd';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 

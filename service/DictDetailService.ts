@@ -1,8 +1,5 @@
 import {
   DictDetail,
-  DictDetailSearchCriteria,
-  Pageable,
-  Sort,
   IList,
   List,
   IListResult,
@@ -21,7 +18,7 @@ export class DictDetailService {
   /**
    *
    */
-  static dictDetails(
+  static get(
     params: {
       /**  */
       id: number;
@@ -43,7 +40,31 @@ export class DictDetailService {
   /**
    *
    */
-  static dictDetails1(
+  static update(
+    params: {
+      /**  */
+      id: number;
+      /** requestBody */
+      body?: DictDetail;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/dictDetails/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   *
+   */
+  static delete(
     params: {
       /**  */
       id: number;
@@ -65,7 +86,7 @@ export class DictDetailService {
   /**
    *
    */
-  static dictDetails2(options: IRequestOptions = {}): Promise<any> {
+  static list(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/dictDetails';
 
@@ -80,28 +101,7 @@ export class DictDetailService {
   /**
    *
    */
-  static dictDetails3(
-    params: {
-      /** requestBody */
-      body?: DictDetail;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/dictDetails';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   *
-   */
-  static dictDetails4(
+  static create(
     params: {
       /** requestBody */
       body?: DictDetail;
@@ -125,9 +125,15 @@ export class DictDetailService {
   static search(
     params: {
       /**  */
-      criteria: DictDetailSearchCriteria;
+      dictId?: number;
       /**  */
-      pageable: Pageable;
+      label?: string;
+      /** Zero-based page index (0..N) */
+      page?: number;
+      /** The size of the page to be returned */
+      size?: number;
+      /** Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+      sort?: any | null[];
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
@@ -135,7 +141,13 @@ export class DictDetailService {
       let url = basePath + '/dictDetails/search';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { criteria: params['criteria'], pageable: params['pageable'] };
+      configs.params = {
+        dictId: params['dictId'],
+        label: params['label'],
+        page: params['page'],
+        size: params['size'],
+        sort: params['sort']
+      };
       let data = null;
 
       configs.data = data;

@@ -1,8 +1,5 @@
 import {
   Role,
-  RoleSearchCriteria,
-  Pageable,
-  Sort,
   IList,
   List,
   IListResult,
@@ -21,7 +18,7 @@ export class RolesService {
   /**
    *
    */
-  static roles(
+  static get4(
     params: {
       /**  */
       id: number;
@@ -43,7 +40,31 @@ export class RolesService {
   /**
    *
    */
-  static roles1(
+  static update5(
+    params: {
+      /**  */
+      id: number;
+      /** requestBody */
+      body?: Role;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/roles/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   *
+   */
+  static delete4(
     params: {
       /**  */
       id: number;
@@ -65,7 +86,7 @@ export class RolesService {
   /**
    *
    */
-  static roles2(options: IRequestOptions = {}): Promise<any> {
+  static list4(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/roles';
 
@@ -80,28 +101,7 @@ export class RolesService {
   /**
    *
    */
-  static roles3(
-    params: {
-      /** requestBody */
-      body?: Role;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/roles';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   *
-   */
-  static roles4(
+  static create5(
     params: {
       /** requestBody */
       body?: Role;
@@ -122,12 +122,18 @@ export class RolesService {
   /**
    *
    */
-  static search(
+  static search4(
     params: {
       /**  */
-      criteria: RoleSearchCriteria;
+      name?: string;
       /**  */
-      pageable: Pageable;
+      blocked?: boolean;
+      /** Zero-based page index (0..N) */
+      page?: number;
+      /** The size of the page to be returned */
+      size?: number;
+      /** Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+      sort?: any | null[];
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
@@ -135,7 +141,13 @@ export class RolesService {
       let url = basePath + '/roles/search';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { criteria: params['criteria'], pageable: params['pageable'] };
+      configs.params = {
+        name: params['name'],
+        blocked: params['blocked'],
+        page: params['page'],
+        size: params['size'],
+        sort: params['sort']
+      };
       let data = null;
 
       configs.data = data;

@@ -1,8 +1,5 @@
 import {
   User,
-  UserSearchCriteria,
-  Pageable,
-  Sort,
   IList,
   List,
   IListResult,
@@ -21,7 +18,7 @@ export class UsersService {
   /**
    *
    */
-  static users(
+  static get5(
     params: {
       /**  */
       id: number;
@@ -43,7 +40,31 @@ export class UsersService {
   /**
    *
    */
-  static users1(
+  static update6(
+    params: {
+      /**  */
+      id: number;
+      /** requestBody */
+      body?: User;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/users/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   *
+   */
+  static delete5(
     params: {
       /**  */
       id: number;
@@ -65,7 +86,7 @@ export class UsersService {
   /**
    *
    */
-  static users2(options: IRequestOptions = {}): Promise<any> {
+  static list5(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/users';
 
@@ -80,28 +101,7 @@ export class UsersService {
   /**
    *
    */
-  static users3(
-    params: {
-      /** requestBody */
-      body?: User;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/users';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   *
-   */
-  static users4(
+  static create6(
     params: {
       /** requestBody */
       body?: User;
@@ -122,12 +122,20 @@ export class UsersService {
   /**
    *
    */
-  static search(
+  static search5(
     params: {
       /**  */
-      criteria: UserSearchCriteria;
+      username?: string;
       /**  */
-      pageable: Pageable;
+      phone?: string;
+      /**  */
+      blocked?: boolean;
+      /** Zero-based page index (0..N) */
+      page?: number;
+      /** The size of the page to be returned */
+      size?: number;
+      /** Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+      sort?: any | null[];
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
@@ -135,7 +143,14 @@ export class UsersService {
       let url = basePath + '/users/search';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { criteria: params['criteria'], pageable: params['pageable'] };
+      configs.params = {
+        username: params['username'],
+        phone: params['phone'],
+        blocked: params['blocked'],
+        page: params['page'],
+        size: params['size'],
+        sort: params['sort']
+      };
       let data = null;
 
       configs.data = data;
